@@ -109,3 +109,18 @@ def fill_db(employers: list[dict], database_name, params):
 
     connection.commit()
     connection.close()
+
+
+def update_database_config():
+    config_data = {
+        'host': input('Введите хост: '),
+        'user': input('Введите имя пользователя: '),
+        'password': input('Введите пароль: '),
+        'port': input('Введите порт: ')
+    }
+
+    with open('database.ini', 'w') as config_file:
+        config_file.write('[postgresql]\n')
+        for key, value in config_data.items():
+            config_file.write(f'{key}={value}\n')
+
