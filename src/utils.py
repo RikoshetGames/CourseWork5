@@ -39,6 +39,7 @@ def filter_strings(string: str) -> str:
 
 
 def filter_salary(salary):
+    """Функция принимает в качестве аргумента словарь с зарплатами"""
     if salary is not None:
         if salary['from'] is not None and salary['to'] is not None:
             return round((salary['from'] + salary['to']) / 2)
@@ -50,6 +51,7 @@ def filter_salary(salary):
 
 
 def create_db(database_name, params):
+    """Функция создает базу данных"""
     connection = psycopg2.connect(database='postgres', **params)
     connection.autocommit = True
 
@@ -61,6 +63,7 @@ def create_db(database_name, params):
 
 
 def create_tables(database_name, params):
+    """Функция создает таблицы в базе данных"""
     connection = psycopg2.connect(database=database_name.lower(), **params)
 
     with connection.cursor() as cursor:
@@ -85,6 +88,7 @@ def create_tables(database_name, params):
 
 
 def fill_db(employers: list[dict], database_name, params):
+    """Функция заполняет базу данных"""
     connection = psycopg2.connect(database=database_name.lower(), **params)
 
     with connection.cursor() as cursor:
@@ -113,6 +117,7 @@ def fill_db(employers: list[dict], database_name, params):
 
 
 def update_database_config():
+    """Функция обновляет конфигурацию базы данных"""
     config_data = {
         'host': input('Введите хост: '),
         'user': input('Введите имя пользователя: '),
@@ -126,6 +131,7 @@ def update_database_config():
             config_file.write(f'{key}={value}\n')
 
 def user_interface(database_name, params):
+    """Функция запускает пользовательский интерфейс"""
     dbmanager = DBManager(database_name, params)
 
     while True:
@@ -135,6 +141,7 @@ def user_interface(database_name, params):
         print("Введите 4, чтобы Получить список всех вакансий, у которых зарплата выше средней по всем вакансиям")
         print("Введите 5, чтобы Получить список всех вакансий, в названии которых содержатся переданные в метод слова")
         print("Введите Стоп, чтобы завершить работу")
+        print()
         task = input("Ваш выбор: ")
 
         if task == "Стоп":
@@ -162,4 +169,5 @@ def user_interface(database_name, params):
             print(dbmanager.get_vacancies_with_keyword(keyword))
             print()
         else:
+            print()
             print('Неправильный запрос')
