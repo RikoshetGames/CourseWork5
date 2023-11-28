@@ -8,6 +8,7 @@ class DBManager:
         self.params = params
 
     def get_companies_and_vacancies_count(self):
+        """Выводит количество компаний и вакансий в каждой компании"""
 
         try:
             connection = psycopg2.connect(database=self.database_name, **self.params)
@@ -27,6 +28,7 @@ class DBManager:
         return data
 
     def get_all_vacancies(self):
+        """Выводит все вакансии"""
 
         try:
             connection = psycopg2.connect(database=self.database_name, **self.params)
@@ -45,6 +47,7 @@ class DBManager:
         return data
 
     def get_avg_salary(self):
+        """Выводит среднюю зарплату по вакансиям"""
 
         try:
             connection = psycopg2.connect(database=self.database_name, **self.params)
@@ -64,6 +67,7 @@ class DBManager:
         return data
 
     def get_vacancies_wth_highest_salary(self):
+        """Выводит вакансии, у которых зарплата выше средней по всем вакансиям"""
         try:
             connection = psycopg2.connect(database=self.database_name, **self.params)
             with connection.cursor() as cursor:
@@ -81,6 +85,7 @@ class DBManager:
         return data
 
     def get_vacancies_with_keyword(self, keyword):
+        """Выводит вакансии, в названии которых содержатся переданные в метод слова"""
         try:
             connection = psycopg2.connect(database=self.database_name, **self.params)
             with connection.cursor() as cursor:
