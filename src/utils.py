@@ -52,9 +52,16 @@ def create_db(database_name, params):
     connection.autocommit = True
 
     with connection.cursor() as cursor:
-        #cursor.execute(f'DROP DATABASE {database_name}')
-        cursor.execute(f'CREATE DATABASE {database_name.lower()}')
+        cursor.execute("SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s;", (database_name,))
+        exists = cursor.fetchone()
 
+        if exists:
+            cursor.execute(f'DROP DATABASE {database_name}')
+            cursor.execute(f'CREATE DATABASE {database_name.lower()}')
+            print(f'Обновляю базу данных {database_name}, пожалуйста подождите...')
+        else:
+            cursor.execute(f'CREATE DATABASE {database_name.lower()}')
+            print(f'Создаю базу данных {database_name}, пожалуйста подождите...')
     connection.close()
 
 
@@ -126,6 +133,7 @@ def update_database_config():
         for key, value in config_data.items():
             config_file.write(f'{key}={value}\n')
 
+
 def user_interface(database_name, params):
     """Функция запускает пользовательский интерфейс"""
     dbmanager = DBManager(database_name, params)
@@ -140,7 +148,8 @@ def user_interface(database_name, params):
         print()
         task = input("Ваш выбор: ")
 
-        if task == "Стоп":
+        if task == "Стоп" or task == "стоп" or task == "STOP" or task == "stop":
+            print("До свидания!")
             break
         elif task == '1':
             print()
@@ -167,3 +176,7 @@ def user_interface(database_name, params):
         else:
             print()
             print('Неправильный запрос')
+
+
+def is_english(user_input):
+    return all(97 <= ord(c) <= 122 for c in user_input)
